@@ -1,19 +1,43 @@
 import React, {useEffect} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {getMovies} from '../../redux/actions';
+import {addFavorite, getMovies, removeFavorite} from '../../redux/actions';
 import MovieItem from './components/MovieItem';
 
 const Movies = () => {
-  const {movies} = useSelector(state => state.moviesReducer);
+  const {movies, favorites} = useSelector(state => state.moviesReducer);
+
   const dispatch = useDispatch();
   const fetchMovies = () => dispatch(getMovies());
+  const addToFavorites = movie => dispatch(addFavorite(movie));
+  const removeFromFavorites = movie => dispatch(removeFavorite(movie));
+  const handleAddFavorite = movie => {
+    addToFavorites(movie);
+  };
+  const handleRemoveFavorite = movie => {
+    removeFromFavorites(movie);
+  };
+
   useEffect(() => {
     fetchMovies();
   }, []);
 
+  const exists = movie => {
+    if (favorites.filter(item => item.id === movie.id).length > 0) {
+      return true;
+    }
+    return false;
+  };
+
   const renderMovieItem = ({item}) => {
-    return <MovieItem item={item} />;
+    return (
+      <MovieItem
+        item={item}
+        exists={exists}
+        handleAddFavorite={handleAddFavorite}
+        handleRemoveFavorite={handleRemoveFavorite}
+      />
+    );
   };
 
   return (

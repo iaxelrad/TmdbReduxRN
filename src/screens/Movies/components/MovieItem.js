@@ -2,8 +2,13 @@ import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import React from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const MovieItem = ({item}) => {
+const MovieItem = ({item, exists, handleAddFavorite, handleRemoveFavorite}) => {
   const IMAGE_URL = 'https://image.tmdb.org/t/p/w185' + item.poster_path;
+
+  const onPress = () => {
+    exists(item) ? handleRemoveFavorite(item) : handleAddFavorite(item);
+  };
+
   return (
     <View style={styles.itemWrapper}>
       <View style={styles.itemContent}>
@@ -20,10 +25,14 @@ const MovieItem = ({item}) => {
             <MaterialIcons color="green" name="thumb-up" size={32} />
             <Text style={styles.vote}>{item.vote_count}</Text>
             <TouchableOpacity
-              onPress={() => console.log('Added!')}
+              onPress={onPress}
               activeOpacity={0.7}
               style={styles.favoriteButton}>
-              <MaterialIcons color="orange" size={32} name="favorite-outline" />
+              <MaterialIcons
+                color="orange"
+                size={32}
+                name={exists(item) ? 'favorite' : 'favorite-outline'}
+              />
             </TouchableOpacity>
           </View>
         </View>
