@@ -1,9 +1,6 @@
 import axios from 'axios';
 import {API_KEY} from '../../config';
-
-export const GET_MOVIES = 'GET_MOVIES';
-export const ADD_FAVORITE_ITEM = 'ADD_FAVORITE_ITEM';
-export const REMOVE_FAVORITE_ITEM = 'REMOVE_FAVORITE_ITEM';
+import {ADD_FAVORITE_ITEM, GET_MOVIES, REMOVE_FAVORITE_ITEM} from './types';
 
 const API_URL = 'https://api.themoviedb.org/3/movie/popular';
 const PARAMS = 'page=1';
@@ -14,10 +11,7 @@ export const getMovies = () => {
     return async dispatch => {
       const res = await axios.get(`${BASE_URL}`);
       if (res.data) {
-        dispatch({
-          type: GET_MOVIES,
-          payload: res.data,
-        });
+        dispatch({type: GET_MOVIES, payload: res.data});
       } else {
         console.log('Unable to fetch');
       }

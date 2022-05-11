@@ -1,4 +1,8 @@
-import {ADD_FAVORITE_ITEM, GET_MOVIES, REMOVE_FAVORITE_ITEM} from '../actions';
+import {
+  ADD_FAVORITE_ITEM,
+  GET_MOVIES,
+  REMOVE_FAVORITE_ITEM,
+} from '../actions/types';
 
 const initialState = {
   movies: [],
