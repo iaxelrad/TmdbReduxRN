@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {addFavorite, getMovies, removeFavorite} from '../../redux/actions';
+import {getMovies} from '../../redux/actions';
 import MovieItem from './components/MovieItem';
 
 const Movies = () => {
@@ -9,17 +9,10 @@ const Movies = () => {
 
   const dispatch = useDispatch();
   const fetchMovies = () => dispatch(getMovies());
-  const addToFavorites = movie => dispatch(addFavorite(movie));
-  const removeFromFavorites = movie => dispatch(removeFavorite(movie));
-  const handleAddFavorite = movie => {
-    addToFavorites(movie);
-  };
-  const handleRemoveFavorite = movie => {
-    removeFromFavorites(movie);
-  };
 
   useEffect(() => {
     fetchMovies();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const exists = movie => {
@@ -30,14 +23,7 @@ const Movies = () => {
   };
 
   const renderMovieItem = ({item}) => {
-    return (
-      <MovieItem
-        item={item}
-        exists={exists}
-        handleAddFavorite={handleAddFavorite}
-        handleRemoveFavorite={handleRemoveFavorite}
-      />
-    );
+    return <MovieItem item={item} exists={exists} />;
   };
 
   return (

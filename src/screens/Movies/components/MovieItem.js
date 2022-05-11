@@ -1,12 +1,24 @@
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import React from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useDispatch} from 'react-redux';
+import {addFavorite, removeFavorite} from '../../../redux/actions';
 
-const MovieItem = ({item, exists, handleAddFavorite, handleRemoveFavorite}) => {
+const MovieItem = ({item, exists, fromFavorites = false}) => {
+  const dispatch = useDispatch();
+  const addToFavorites = movie => dispatch(addFavorite(movie));
+  const handleAddFavorite = movie => addToFavorites(movie);
+  const removeFromFavorites = movie => dispatch(removeFavorite(movie));
+  const handleRemoveFavorite = movie => removeFromFavorites(movie);
+
   const IMAGE_URL = 'https://image.tmdb.org/t/p/w185' + item.poster_path;
 
   const onPress = () => {
-    exists(item) ? handleRemoveFavorite(item) : handleAddFavorite(item);
+    if (fromFavorites) {
+      handleRemoveFavorite(item);
+    } else {
+      exists(item) ? handleRemoveFavorite(item) : handleAddFavorite(item);
+    }
   };
 
   return (
@@ -31,7 +43,13 @@ const MovieItem = ({item, exists, handleAddFavorite, handleRemoveFavorite}) => {
               <MaterialIcons
                 color="orange"
                 size={32}
-                name={exists(item) ? 'favorite' : 'favorite-outline'}
+                name={
+                  fromFavorites
+                    ? 'favorite'
+                    : exists(item)
+                    ? 'favorite'
+                    : 'favorite-border'
+                }
               />
             </TouchableOpacity>
           </View>
